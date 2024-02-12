@@ -64,13 +64,18 @@ async function addParty (event) {
 
     await fetch(API_URL, {
         method: "POST", // method to add new party
-        headers: { " Content-Type": "application/json" }, // Set content type header
+        headers: { "Content-Type": "application/json" }, // Set content type header
         body: JSON.stringify(party), // cnvert to JSON
 
     });
+    event.target.reset();
 
     fetchParties();
 }
+
+document.getElementById("addAnotherParty").addEventListener("click", () => {
+    document.getElementById("addPartyForm").reset(); // Clear form for new input
+});
 
 async function deleteParty(id) {
 
@@ -82,18 +87,32 @@ async function deleteParty(id) {
 }
 
 function renderParties() {
-    const list = document.getElementById("partyList");
+//     const list = document.getElementById("partyList");
 
-    // Mappning party to HTML string and joining them
-    list.innerHTML = state.parties.map(party => `
-        <li>
-            ${party.name} - ${party.date} - ${party.time} - ${party.location}
-            <p>${party.description}</p>
-            <button onclick="deleteParty('${party.id}')">Delete</button>
-        </li>
-        `).join(``);
+//     // Mappning party to HTML string and joining them
+//     list.innerHTML = state.parties.map(party => `
+//         <li>
+//             ${party.name} - ${party.date} - ${party.time} - ${party.location}
+//             <p>${party.description}</p>
+//             <button onclick="deleteParty('${party.id}')">Delete</button>
+//         </li>
+//         `).join(``);
 
-        console.log("Parties rendered");
+//         console.log("Parties rendered");
+// }
+const tbody = document.querySelector("#partyList tbody");
+
+    tbody.innerHTML = state.parties.map(party => `
+        <tr>
+            <td>${party.name}</td>
+            <td>${party.date}</td>
+            <td>${party.time}</td>
+            <td>${party.location}</td>
+            <td>${party.description}</td>
+            <td><button onclick="deleteParty('${party.id}')">Delete</button></td>
+        </tr>
+    `).join('');
+    console.log("Parties rendered");
 }
 
 

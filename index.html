@@ -5,11 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="index.css">
-    <script src="index.js"></script>
+    <!-- <script src="index.js"></script> -->
 </head>
 <body>
     <h1>Party List</h1>
-    <ul id="partyList"></ul>
+    
+    <!-- <ul id="partyList"></ul> -->
+    <table id="partyList">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Location</th>
+            <th>Description</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+        </tbody>
+      </table>
+    
     <form id="addPartyForm">
         <input type="text" name="name" placeholder="Name" required>
         <input type="text" name="date" placeholder="Date" required>
@@ -17,8 +34,10 @@
         <input type="text" name="location" placeholder="Location" required>
         <textarea name="description" placeholder="Description" required></textarea>
 
-        <button type="submit">Add Another Party</button>
+        <!-- <button type="submit">Add Another Party</button> -->
+        <button type="submit">Submit</button>
     </form>
-    
+    <button id="addAnotherParty">Add Another Party</button>
+    <script src="index.js"></script>    
 </body>
 </html>
