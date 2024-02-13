@@ -38,21 +38,37 @@
     // https://fsa-crud-2aa9294fe819.herokuapp.com/api/2311-FTB-MT-WEB-PT/events
 
 //Let's start by defining what the API URL is anf the initial state
-const API_URL = "https://fsa-crud-2aa9294fe819.herokuapp.com/api/2311-FTB-MT-WEB-PT/events";
+const COHORT = `2311-FTB-MT-WEB-PT`;
+const BASE_URL = `https://fsa-crud-2aa9294fe819.herokuapp.com/api/`;
+const RESOURCE = `/events`;
+const API_URL = BASE_URL+COHORT+RESOURCE;
+
 let state = { parties: [] };
 
 async function fetchParties () {
 
     console.log("Fetching parties...");
 
-    const response = await fetch(API_URL); // Making the API call
-    const data = await response.json (); // I'll fetch the data if you await
-    state.parties = data.data; // updating state with the fetched parties
-
-    console.log("Parties fetched: ", state.parties);
-    
-    renderParties();
+    try {
+        const response = await fetch(API_URL);
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.message);
+        state.parties = data.data;
+        renderParties();
+    } catch (error) {
+        console.error("Error fetching parties:", error);
+        // Handle the error (e.g., show a user-friendly message on the UI)
+    }
 }
+
+//     const response = await fetch(API_URL); // Making the API call
+//     const data = await response.json (); // I'll fetch the data if you await
+//     state.parties = data.data; // updating state with the fetched parties
+
+//     console.log("Parties fetched: ", state.parties);
+    
+//     renderParties();
+// }
 
 async function addParty (event) {
 
@@ -61,17 +77,48 @@ async function addParty (event) {
     const party = Object.fromEntries(formData.entries());
 
     console.log("Adding party: ", party);
-
-    await fetch(API_URL, {
-        method: "POST", // method to add new party
-        headers: { "Content-Type": "application/json" }, // Set content type header
-        body: JSON.stringify(party), // cnvert to JSON
-
-    });
-    event.target.reset();
-
-    fetchParties();
+    try {
+        const response = await fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(party),
+        });
+        if (!response.ok) throw new Error('Failed to add the party.');
+        fetchParties();
+        event.target.reset();
+    } catch (error) {
+        console.error("Error adding party:", error);
+        // Handle the error
+    }
 }
+
+    // await fetch(API_URL, {
+    //     method: "POST", // method to add new party
+    //     headers: { "Content-Type": "application/json" }, // Set content type header
+    //     body: JSON.stringify(party), // cnvert to JSON
+
+    // });
+
+
+    // const response = await fetch(API_URL, {
+    //     method: "POST",
+    //     headers: { "Content-Type": "application/json" },
+    //     body: JSON.stringify(party),
+    // });
+
+    // if (response.ok) {
+    //     fetchParties();
+    //     event.target.reset();
+    // } else {
+        
+    //     console.error(`Failed to add party: ${response.status} - ${response.statusText}`);
+    // }
+    // }
+
+    // event.target.reset();
+
+//     fetchParties();
+// }
 
 document.getElementById("addAnotherParty").addEventListener("click", () => {
     document.getElementById("addPartyForm").reset(); // Clear form for new input
@@ -81,9 +128,18 @@ async function deleteParty(id) {
 
     console.log("Deleting party with ID: ", id);
 
-    await fetch(`${API_URL}/${id}`, { method: "DELETE"}); // API call to delete the party
-    fetchParties();
+//     await fetch(`${API_URL}/${id}`, { method: "DELETE"}); // API call to delete the party
+//     fetchParties();
 
+// }
+try {
+    const response = await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+    if (!response.ok) throw new Error('Failed to delete the party.');
+    fetchParties();
+} catch (error) {
+    console.error("Error deleting party:", error);
+    // Handle the error
+}
 }
 
 function renderParties() {
